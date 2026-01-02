@@ -39,24 +39,6 @@ uci set argon.@global[0].mode='dark'
 uci set argon.@global[0].online_wallpaper='none'
 uci set argon.@global[0].transparency_dark='0.3'
 uci commit argon
-uci -q set zz_config.@status[0].first_boot=0
-uci commit zz_config
-fi
-
-sed -i "s?set wireless\.default_radio\${devidx}\.ssid=LEDE?set wireless\.default_radio\${devidx}\.ssid=\'zzXGP\'?g" /lib/wifi/mac80211.sh
-sed -i "s?set wireless\.default_radio\${devidx}\.encryption=none?set wireless\.default_radio\${devidx}\.encryption=\'psk2+ccmp\'\n\t\t\tset wireless\.default_radio\${devidx}\.key=\'xgpxgpxgp\'?g" /lib/wifi/mac80211.sh
-
-uci set alpha.@navbar[2].name='nlbw'
-uci set alpha.@navbar[2].enable='Enable'
-uci set alpha.@navbar[2].icon='/www/luci-static/alpha/zz/icon/navbar/bandwidth.png'
-uci set alpha.@navbar[2].address='/cgi-bin/luci/admin/services/nlbw'
-uci set alpha.@navbar[3].name='Modem'
-uci set alpha.@navbar[3].icon='/www/luci-static/alpha/gaya/icon/navbar/modem.png'
-uci set alpha.@navbar[3].address='/cgi-bin/luci/admin/modem/qmodem'
-uci set alpha.@navbar[4].name='Wireless'
-uci set alpha.@navbar[4].icon='/www/luci-static/alpha/zz/icon/navbar/wifi.png'
-uci set alpha.@navbar[4].address='/cgi-bin/luci/admin/network/wireless'
-uci commit alpha
 
 uci set system.@system[0].ttylogin=1
 
@@ -102,7 +84,14 @@ if [ -n "$STOR_DEV_TO_MOUNT" ]; then
     echo "$STOR_DEV_TO_MOUNT $STOR_MOUNT_POINT auto defaults 0 2" >> /etc/fstab
     uci set dockerd.globals.data_root="$STOR_MOUNT_POINT/docker/"
     uci commit dockerd
-    service dockerd restart
+    sleep 2
+    /etc/init.d/dockerd restart
 else
     echo "persistent dev not found" >> /tmp/zz-init.log
 fi
+
+uci -q set zz_config.@status[0].first_boot=0
+uci commit zz_config
+fi
+
+exit 0
