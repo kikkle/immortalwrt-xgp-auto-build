@@ -1,0 +1,83 @@
+#!/bin/sh
+is_first_boot=`uci -q get zz_config.@status[0].first_boot`
+if test $is_first_boot -gt 0; then
+echo -e "xgpxgpxgp\nxgpxgpxgp" | (passwd root)
+uci set system.@system[0].hostname='zzXGP'
+uci commit system
+uci del dhcp.lan.ra_slaac
+uci set network.lan.ipaddr='10.0.0.1'
+uci add_list network.lan.ip6class='mpcie1v6'
+uci add_list network.lan.ip6class='mpcie2v6'
+uci add_list network.lan.ip6class='wwanv6'
+uci add_list network.lan.ip6class='wan6'
+uci set luci.main.lang='zh_cn'
+uci set luci.main.mediaurlbase='/luci-static/argon'
+#uci set cpufreq.global.set='1'
+#uci set cpufreq.cpufreq.minfreq0='600000'
+#uci set cpufreq.cpufreq.maxfreq0='1608000'
+#uci set luci-fan.@luci-fan[0]=luci-fan
+#uci set luci-fan.@luci-fan[0].enabled='1'
+#uci set luci-fan.@luci-fan[0].off_temp='10'
+#uci set luci-fan.@luci-fan[0].on_temp='25'
+uci set qmodem.main.at_tool='1'
+uci set qmodem.main.start_delay='15'
+uci set qmodem.main.enable_pcie_scan='1'
+uci set qmodem.main.enable_usb_scan='1'
+uci commit
+/etc/init.d/network reload
+uci set wireless.radio0.cell_density='0'
+uci set wireless.default_radio0.ssid='zzXGP'
+uci set wireless.default_radio0.encryption='psk2+ccmp'
+uci set wireless.default_radio0.key='xgpxgpxgp'
+uci set wireless.default_radio1.ssid='zzXGP'
+uci set wireless.default_radio1.encryption='psk2+ccmp'
+uci set wireless.default_radio1.key='xgpxgpxgp'
+uci commit wireless
+/etc/init.d/network reload
+wifi
+uci set argon.@global[0].mode='dark'
+uci set argon.@global[0].online_wallpaper='none'
+uci set argon.@global[0].transparency_dark='0.3'
+uci commit argon
+uci -q set zz_config.@status[0].first_boot=0
+uci commit zz_config
+fi
+
+sed -i "s?set wireless\.default_radio\${devidx}\.ssid=LEDE?set wireless\.default_radio\${devidx}\.ssid=\'zzXGP\'?g" /lib/wifi/mac80211.sh
+sed -i "s?set wireless\.default_radio\${devidx}\.encryption=none?set wireless\.default_radio\${devidx}\.encryption=\'psk2+ccmp\'\n\t\t\tset wireless\.default_radio\${devidx}\.key=\'xgpxgpxgp\'?g" /lib/wifi/mac80211.sh
+
+uci set alpha.@navbar[2].name='nlbw'
+uci set alpha.@navbar[2].enable='Enable'
+uci set alpha.@navbar[2].icon='/www/luci-static/alpha/zz/icon/navbar/bandwidth.png'
+uci set alpha.@navbar[2].address='/cgi-bin/luci/admin/services/nlbw'
+uci set alpha.@navbar[3].name='Modem'
+uci set alpha.@navbar[3].icon='/www/luci-static/alpha/gaya/icon/navbar/modem.png'
+uci set alpha.@navbar[3].address='/cgi-bin/luci/admin/modem/qmodem'
+uci set alpha.@navbar[4].name='Wireless'
+uci set alpha.@navbar[4].icon='/www/luci-static/alpha/zz/icon/navbar/wifi.png'
+uci set alpha.@navbar[4].address='/cgi-bin/luci/admin/network/wireless'
+uci commit alpha
+
+uci set system.@system[0].ttylogin=1
+
+# /etc/init.d/zz_xgp_screen enable
+# /etc/init.d/zz_xgp_screen start
+
+uci set qmodem.wwan=modem-slot
+uci set qmodem.wwan.type='usb'
+uci set qmodem.wwan.slot='8-1'
+uci set qmodem.wwan.net_led='blue:net'
+uci set qmodem.wwan.alias='wwan'
+uci set qmodem.mpcie1=modem-slot
+uci set qmodem.mpcie1.type='pcie'
+uci set qmodem.mpcie1.slot='0001:11:00.0'
+uci set qmodem.mpcie1.net_led='blue:net'
+uci set qmodem.mpcie1.alias='mpcie1'
+uci set qmodem.mpcie2=modem-slot
+uci set qmodem.mpcie2.type='pcie'
+uci set qmodem.mpcie2.slot='0002:21:00.0'
+uci set qmodem.mpcie2.net_led='blue:net'
+uci set qmodem.mpcie2.alias='mpcie2'
+uci commit qmodem
+echo "pcie_mhi mhi_mbim_enabled=1" > /etc/modules.d/90-pcie_mhi
+
