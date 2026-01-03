@@ -45,6 +45,79 @@ uci set system.@system[0].ttylogin=1
 # /etc/init.d/zz_xgp_screen enable
 # /etc/init.d/zz_xgp_screen start
 
+uci delete mwan3.@rule[-1]
+uci delete mwan3.@rule[-1]
+uci delete mwan3.@rule[-1]
+uci delete mwan3.@rule[-1]
+uci delete mwan3.@rule[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@policy[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@member[-1]
+uci delete mwan3.@interface[-1]
+uci delete mwan3.@interface[-1]
+uci delete mwan3.@interface[-1]
+uci delete mwan3.@interface[-1]
+uci delete mwan3.@interface[-1]
+uci commit mwan3
+
+uci set qmodem_mwan.global.enable_mwan='1'
+uci set qmodem_mwan.global.sticky_mode='0'
+
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='119.29.29.29'
+
+uci add qmodem_mwan ipv4
+uci set qmodem_mwan.@ipv4[-1].member_priority='1'
+uci set qmodem_mwan.@ipv4[-1].member_weight='1'
+uci set qmodem_mwan.@ipv4[-1].member_interface='wwan'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='test.ustc.edu.cn'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='cip.cc'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.222.222'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.220.220'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='119.29.29.29'
+uci set qmodem_mwan.@ipv4[-1].member_priority='50'
+
+uci add qmodem_mwan ipv4
+uci set qmodem_mwan.@ipv4[-1].member_priority='1'
+uci set qmodem_mwan.@ipv4[-1].member_weight='1'
+uci set qmodem_mwan.@ipv4[-1].member_interface='mpcie1'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='test.ustc.edu.cn'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='cip.cc'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.222.222'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.220.220'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='119.29.29.29'
+uci set qmodem_mwan.@ipv4[-1].member_priority='50'
+
+uci add qmodem_mwan ipv4
+uci set qmodem_mwan.@ipv4[-1].member_priority='1'
+uci set qmodem_mwan.@ipv4[-1].member_weight='1'
+uci set qmodem_mwan.@ipv4[-1].member_interface='mpcie2'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='test.ustc.edu.cn'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='cip.cc'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.222.222'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='208.67.220.220'
+uci add_list qmodem_mwan.@ipv4[-1].member_track_ip='119.29.29.29'
+uci set qmodem_mwan.@ipv4[-1].member_priority='50'
+
+uci commit qmodem_mwan
+
 uci set qmodem.wwan=modem-slot
 uci set qmodem.wwan.type='usb'
 uci set qmodem.wwan.slot='8-1'
