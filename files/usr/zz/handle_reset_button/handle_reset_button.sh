@@ -19,6 +19,8 @@ handle_press() {
     echo timer > /sys/class/leds/blue:status/trigger
     echo 500 > /sys/class/leds/blue:status/delay_on
     echo 500 > /sys/class/leds/blue:status/delay_off
+    /etc/init.d/zz_xgp_screen stop
+    cat /usr/zz/handle_reset_button/info.raw > /dev/fb0
 }
 
 handle_release() {
@@ -44,10 +46,11 @@ handle_release() {
         echo 50 > /sys/class/leds/blue:wan/delay_on
         echo 50 > /sys/class/leds/blue:wan/delay_off
         echo "FACTORY RESET" > /dev/console
+        cat /usr/zz/handle_reset_button/reset.raw > /dev/fb0
         sleep 3
         jffs2reset -y && reboot &
         
-    elif [ "$duration" -ge 1 ]; then
+    elif [ "$duration" -ge 3 ]; then
         log_kmsg "REBOOT triggered (held for ${duration}s)"
         logger -t "$LOG_TAG" "Reboot initiated - button held for ${duration} seconds"
         echo timer > /sys/class/leds/blue:status/trigger
@@ -57,12 +60,14 @@ handle_release() {
         echo 250 > /sys/class/leds/blue:wan/delay_on
         echo 250 > /sys/class/leds/blue:wan/delay_off
         echo "REBOOT" > /dev/console
+        cat /usr/zz/handle_reset_button/reboot.raw > /dev/fb0
         sleep 3
         sync
         reboot &
     else
         log_kmsg "Button press too short (${duration}s), ignoring"
         echo heartbeat > /sys/class/leds/blue:status/trigger
+        /etc/init.d/zz_xgp_screen start
     fi
 }
 
