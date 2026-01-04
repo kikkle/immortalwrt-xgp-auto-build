@@ -43,7 +43,6 @@ jobs:
           sudo ./install-env.sh
       - name: Prepare
         run: |
-          rm -rf immortalwrt
           ./prepare.sh
       - name: Cache OpenWrt dl and toolchain
         uses: actions/cache@v3
