@@ -40,6 +40,17 @@ echo "install feeds"
 ./scripts/feeds install -a || { echo "install feeds failed"; exit 1; }
 ./scripts/feeds install -a -f -p qmodem || { echo "install qmodem feeds failed"; exit 1; }
 
+if [ -L "package/zz-packages" ]; then
+    echo "package/zz-packages is already a symlink"
+else
+    if [ -d "package/zz-packages" ]; then
+        echo "package/zz-packages directory exists, removing it"
+        rm -rf package/zz-packages
+    fi
+    ln -s ../../zz-packages package/zz-packages
+    echo "Created symlink package/zz-packages -> ../../zz-packages"
+fi
+
 if [ -d "package/zz/kmod-fb-tft-gc9307" ]; then
     cd package/zz/kmod-fb-tft-gc9307
     git pull || { echo "kmod-fb-tft-gc9307 git pull failed"; exit 1; }
