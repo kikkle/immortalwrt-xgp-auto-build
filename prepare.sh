@@ -37,6 +37,9 @@ diff ../files/lib/wifi/mac80211.uc ./files/lib/wifi/mac80211.uc
 echo "diff lib/wifi/mac80211.uc with immortalwrt repo:"
 diff package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc ./files/lib/wifi/mac80211.uc
 
+# Add TD-TECH option id patch
+cp ../999-add-TD-TECH-option-id.patch ./target/linux/rockchip/patches-6.6/999-add-TD-TECH-option-id.patch
+
 echo "update feeds"
 ./scripts/feeds update -a || { echo "update feeds failed"; exit 1; }
 echo "install feeds"
