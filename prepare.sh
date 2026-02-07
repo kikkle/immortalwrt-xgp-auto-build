@@ -20,7 +20,7 @@ else
 fi
 
 # reset to 8f6bf3907696dc7de78d1da5e25e0fda223497e8 due to framebuffer compatibility issue
-git reset --hard 8f6bf3907696dc7de78d1da5e25e0fda223497e8
+# git reset --hard 8f6bf3907696dc7de78d1da5e25e0fda223497e8
 git reset --hard a9ef25e78561f15a24e77311bcaaa91b6d5f18c4
 
 echo "add feeds"
